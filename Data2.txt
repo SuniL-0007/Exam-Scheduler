@@ -1,0 +1,6 @@
+Smrithi: ADS, GT, LA, COAL
+Sunil: JAVA, ADS, GT
+Diravina: STATS, LA, RLAB
+Sarnika: LA, ADSLAB, STATS, OOPS
+Adarsh: GT, COAL, RLAB
+Bhuvanesh: JAVA, GT, OOPS

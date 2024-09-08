@@ -1,0 +1,5 @@
+CourseA: Student1, Student2, Student3
+CourseB: Student2, Student4, Student5
+CourseC: Student3, Student6
+CourseD: Student4, Student5, Student7
+CourseE: Student8, Student9
