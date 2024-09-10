@@ -1,8 +1,25 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+
 class Vertex:
     def __init__(self, name):
         self.name = name
         self.color = None
         self.visited = False
+
+color_map = {
+    0: "Yellow",
+    1: "Red",
+    2: "Green",
+    3: "LightBlue",
+    4: "Pink",
+    5: "White",
+    6: "Brown",
+    7: "Black",
+    8: "Gray",
+    9: "Orange"
+}
 
 def is_course_exist(course, courses):
     return course in courses
@@ -52,11 +69,28 @@ def greedy_coloring(graph, courses):
 
     return exam_periods
 
-def main():
+def visualize_graph_with_colors(G, color_map,exam_periods):
+    pos = nx.spring_layout(G)  # You can change the layout as needed
+
+    node_colors = [color_map[exam_periods[course]] for course in G.nodes]
+
+    # Create a custom colormap for node colors
+    cmap = mcolors.ListedColormap(node_colors)
+
+    nx.draw(G, pos, with_labels=True, node_color=node_colors, cmap=cmap, node_size=500)
+
+    # Create a legend for the colors
+    color_labels = list(color_map.values())
+    patches = [plt.Line2D([0], [0], marker='o', color=color_map[i], label=label, markersize=10) for i, label in color_map.items()]
+    plt.legend(handles=patches, title="Colors", loc='upper right')
+
+    plt.show()
+
+def main(f):
     global courses
     courses = []
 
-    with open("Data1.txt", "r") as file_ptr:
+    with open(f, "r") as file_ptr:
         file_data = file_ptr.readlines()
 
     for line in file_data:
@@ -115,6 +149,47 @@ def main():
     for exam_period, scheduled_courses in exam_period_courses.items():
         print(f"Final Exam Period {exam_period + 1} -> {', '.join(scheduled_courses)}")
 
+    # Create a graph using NetworkX
+    G = nx.Graph()
+    G.add_nodes_from(courses)
 
+    for i in range(course_count):
+        for j in range(i + 1, course_count):
+            if adj_matrix[i][j] == 1:
+                G.add_edge(courses[i], courses[j])
+
+    # Visualize the graph
+    pos = nx.spring_layout(G)  
+    nx.draw(G, pos, with_labels=True, node_size=800, node_color="skyblue", font_size=10, font_color="black", font_weight="bold")
+    plt.title("Course Graph")
+    plt.show()
+
+    # Create a networkx graph to visualize the colored vertices
+    G = nx.Graph()
+
+    # Add nodes with colors
+    for course in courses:
+        G.add_node(course)
+
+    # Add edges
+    for i in range(len(courses)):
+        for j in range(i + 1, len(courses)):
+            if adj_matrix[i][j] == 1:
+                G.add_edge(courses[i], courses[j])
+
+    # Visualize the graph with colored vertices
+    print("\n")
+    print("The graph after coloring")
+    visualize_graph_with_colors(G, color_map, exam_periods)
+    
 if __name__ == "__main__":
-    main()
+    print("\n")
+    print("                           EXAM SCHEDULER                   ")
+    print("\t                                           DONE BY:       ")
+    print("\t                                                   SMRITHI L (22PD33)")
+    print("\t                                                   SUNIL J  (22PD36)")
+    f=input("Enter the file's name where you have stored the student's details with their courses:")
+    print("\n")
+    main(f)
+
+
